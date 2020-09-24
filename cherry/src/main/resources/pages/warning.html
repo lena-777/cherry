@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>预警分析 -樱桃检测预警平台</title>
+    <link rel="stylesheet" href="../static/css/elementui.css">
+    <!-- 引入图标-->
+    <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
+    <!-- 引入echars.js -->
+    <script src="../static/js/echarts.common.min.js"></script>
+</head>
+
+
+<body >
+<div id="app">
+    <!--header-->
+    <el-header style="height: 20%">
+        <!--导航栏-->
+        <el-row>
+            <el-col :span="2" >
+                <img src="../static/img/first.jpg" style="width: 100px;margin-top: 4%">
+            </el-col>
+            <el-col hidden-sm-and-down :span="4">
+                <img src="../static/img/word.jpg" style="width: 300px;margin-top: 7%">
+            </el-col>
+            <el-col :span="15">
+                <el-menu default-active="5"
+                         class="el-menu-demo headmenu"
+                         mode="horizontal"
+                         active-text-color="#85130f"
+                         index="10">
+                    <el-menu-item index="1" style="margin-top: 7%;color: #85130f" ><a href="index.html">首页</a></el-menu-item>
+                    <el-menu-item index="2" style="margin-top: 7%;color: #85130f"><a href="datareport.html">数据报表</a></el-menu-item>
+                    <el-menu-item index="3" style="margin-top: 7%;color: #85130f"><a href="monitoring.html">实时监控</a></el-menu-item>
+                    <el-menu-item index="5" style="margin-top: 7%;color: #85130f"><a href="warning.html">预警分析</a></el-menu-item>
+                    <el-menu-item index="6" style="margin-top: 7%;color: #85130f"><a href="datasearch.html">数据分析</a></el-menu-item>
+                    <el-menu-item index="7" style="margin-top: 7%;color: #85130f"><a href="callus.html">联系我们</a></el-menu-item>
+                </el-menu>
+
+            </el-col>
+        </el-row>
+
+    </el-header>
+
+    <!--main-->
+    <el-main >
+        <!--图表-->
+        <div id="mycharts" style="width:900px;height: 400px;padding: 0px;margin: 0px;border-width: 0px;" ></div>
+
+    </el-main>
+
+    <!--footer-->
+    <el-footer style="height:180px">
+        <el-row>
+            <!--存放文字说明-->
+            <el-col style="color: #85130f;text-align: center">
+                <h3>萤检|樱桃害虫预警平台</h3>
+                <div>联系电话:13333333333</div>
+                emial:<span style="color: #3a8ee6">123@163.com</span>
+                <div>地址:广东省广州市海珠区滨江街道仲恺路</div>
+                <div>版权所有:萤检有限公司</div>
+            </el-col>
+        </el-row>
+    </el-footer>
+
+</div>
+</body>
+
+<!-- 引入vue和elementUI所需配置文件 -->
+<!--<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>-->
+<script src="../static/js/vuejs-2.5.16.js"></script>
+<script src="../static/js/elementui.js"></script>
+<script src="../static/js/axios.js"></script>
+
+<!-- 引入echars.js -->
+<script src="../static/js/echarts.common.min.js"></script>
+<!-- 引入index.css文件 -->
+<style>
+    @import "../static/css/index.css";
+</style>
+<!-- util.js文件 -->
+<script type="text/javascript" src="../static/js/util.js"></script>
+<!--引入js文件-->
+<script src="../static/js/index.js"></script>
+
+<script type="text/javascript">
+    loadEcharts();     //加载图标
+</script>
+
+
+</html>

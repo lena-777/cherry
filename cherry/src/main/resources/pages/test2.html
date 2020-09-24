@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>html5圆形</title>
+
+</head>
+<body>
+
+<div  style="background-image: url('../static/img/show5.jpg');width: 600px;height: 300px;background-repeat: no-repeat">
+    <canvas id="canvas" width="600" height="600"></canvas>
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+    var cvs = document.getElementById("canvas");
+    var ctx=cvs.getContext("2d");
+    window.addEventListener("load",function(){
+        this.cir(100,100);
+        this.cir(150,150);
+    });
+    function cir(x,y) {
+        //圆1
+        ctx.beginPath();
+        ctx.arc(x,y,35,0,Math.PI*2,false);
+        ctx.fillStyle="rgba(192,80,77,0.7)";//半透明的红色
+        ctx.fill();
+        ctx.strokeStyle="rgba(192,80,77,1)";//红色
+        ctx.stroke();
+    }
+</script>
+
+</html>
