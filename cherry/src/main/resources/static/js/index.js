@@ -453,7 +453,7 @@ new Vue({
         //t判断当前数据是否达到危险，控制表格的输出
         tableRowClassName({row, rowIndex}) {
             //判断当前危险等级
-            if (row.harmLevel > 1) {
+            if (row.harm_level > 1) {
                 return 'warning-row';
             }
             return '';
