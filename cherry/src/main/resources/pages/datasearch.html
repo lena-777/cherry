@@ -39,15 +39,66 @@
         </el-row>
 
     </el-header>
-
     <!--main-->
     <el-main>
-        <!--输入框-->
-        <div style="margin-top: 5px;width: 20%;">
-            <el-input placeholder="请输入数据ID" v-model="searchLogId" class="input-with-select">
-                <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-        </div>
+        <el-row>
+            <el-col :span="7">
+                <!--输入框-->
+                <div style="margin-top: 5px;margin-left:3%;width: 100%;text-align: center;align-content: center">
+                    <div class="demonstration" style="color: #82848a">请输入想分析的数据ID</div>
+                    <!--请输入想要分析的数据ID:-->
+                    <el-input :placeholder="nowWarnData.id" v-model="nowWarnData.id" style="width: 50%">
+                        <el-button slot="append" icon="el-icon-search" v-on:click="searchWarnDataById1(nowWarnData.id)" type="button"></el-button>
+                    </el-input>
+                </div>
+                <!--图表-->
+                <div id="mycharts2" style="width:500px;height:350px"></div>
+            </el-col>
+            <!--存放害虫数据-->
+            <el-col :span="7">
+                <h2 style="color: darkred">{{nowPest.name}}</h2>
+                <h4 class="fourTitle">简介</h4>
+                <p>{{nowPest.brief}}</p>
+                <h4 class="fourTitle">发生规律</h4>
+                <p>{{nowPest.apperlaw}}</p>
+                <h4 class="fourTitle">描述</h4>
+                <p>{{nowPest.describe}}</p>d
+                <h4 class="fourTitle">天敌</h4>
+                <p>{{nowPest.enemy}}</p>
+                <h4 class="fourTitle">生活习性</h4>
+                <p>{{nowPest.describe}}</p>
+                <h4 class="fourTitle">危害特点</h4>
+                <p>{{nowPest.characteristic}}</p>
+                <h4 class="fourTitle">防治手段</h4>
+                <p>{{nowPest.solve}}</p>
+            </el-col>
+            <!--存放农药数据-->
+            <el-col :span="7" style="margin-left: 3%">
+                <!--显示可以选择的农药-->
+                <div>
+                    <h4 style="color: #6f7180">可选择的农药有：</h4>
+                    <el-radio-group v-model="radio">
+                        <el-radio-button  type="button" v-for="p in nowPest.pesticides" :label="p.name" :key="p.id" @click.native="changePesticides(p.id)">{{p.name}}</el-radio-button>
+                    </el-radio-group>
+                </div>
+                <!--某一农药的具体信息-->
+                <div>
+                    <h2 style="color: darkred">{{nowPesticides.name}}</h2>
+                    <h4 class="fourTitle">简介</h4>
+                    <p>{{nowPesticides.brief}}</p>
+                    <h4 class="fourTitle">使用方法</h4>
+                    <p>{{nowPesticides.method}}</p>
+                    <h4 class="fourTitle">适用场景 效果</h4>
+                    <p>{{nowPesticides.suiteffect}}</p>
+                    <h4 class="fourTitle">副作用 危害</h4>
+                    <p>{{nowPesticides.byeffect}}</p>
+                    <h4 class="fourTitle">注意事项</h4>
+                    <p>{{nowPesticides.warning}}</p>
+                    <h4 class="fourTitle">兑水比例</h4>
+                    <p>{{nowPesticides.waterRatio}}</p>
+                </div>
+            </el-col>
+        </el-row>
     </el-main>
 
     <!--footer-->
@@ -79,9 +130,28 @@
 <style>
     @import "../static/css/index.css";
 </style>
-<!-- util.js文件 -->
-<script type="text/javascript" src="../static/js/util.js"></script>
+<!-- 工具文件 -->
+<script type="text/javascript" src="../static/js/jumpPage.js"></script>
+<script src="../static/js/dateOperation.js"></script>
 <!--引入js文件-->
 <script src="../static/js/index.js"></script>
+
+<script>
+    getxData(); //获取图表横坐标。注意：需要在echarts的js文件加入前修改值，否则横坐标不生效。
+</script>
+
+<!--引入echarts-->
+<script src="../static/js/echarts.common.min.js"></script>
+
+<script>
+    let i=QueryString.Init();
+    //console.log("i=="+i);
+    if (i==-1){
+        loadDataEcharts();
+    }else{
+        let id=QueryString.GetValue("id");
+        searchWarnDataById1(id);    //获取数据
+    }
+</script>
 
 </html>

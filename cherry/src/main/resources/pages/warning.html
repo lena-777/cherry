@@ -6,8 +6,6 @@
     <link rel="stylesheet" href="../static/css/elementui.css">
     <!-- 引入图标-->
     <link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon">
-    <!-- 引入echars.js -->
-    <script src="../static/js/echarts.common.min.js"></script>
 </head>
 
 
@@ -44,8 +42,24 @@
 
     <!--main-->
     <el-main >
+        <!--日期输入框-->
+        <div class="block" style="text-align: center">
+            <span class="demonstration" style="color: #82848a">请输入查询的日期范围:</span>
+            <el-date-picker
+                    value-format="yyyy-MM-dd"
+                    v-model="value2"
+                    type="daterange"
+                    align="right"
+                    unlink-panels
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    @change="getDate"
+                    :picker-options="pickerOptions2">
+            </el-date-picker>
+        </div>
         <!--图表-->
-        <div id="mycharts" style="width:900px;height: 400px;padding: 0px;margin: 0px;border-width: 0px;" ></div>
+        <div id="mycharts" style="width:100%;height: 400px;padding: 0px;margin: 0px;border-width: 0px;margin-top: 3%" ></div>
 
     </el-main>
 
@@ -75,17 +89,23 @@
 <!-- 引入echars.js -->
 <script src="../static/js/echarts.common.min.js"></script>
 <!-- 引入index.css文件 -->
-<style>
-    @import "../static/css/index.css";
-</style>
+<style>@import "../static/css/index.css";</style>
 <!-- util.js文件 -->
-<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript" src="../static/js/jumpPage.js"></script>
+<!--引入日期处理文件-->
+<script src="../static/js/dateOperation.js"></script>
 <!--引入js文件-->
 <script src="../static/js/index.js"></script>
-
+<script type="text/javascript">
+    searchHarmLevel();  //害虫等级
+</script>
+<!-- 引入echars.js -->
+<script src="../static/js/echarts.common.min.js"></script>
+<!--页面初始化使用的方法-->
 <script type="text/javascript">
     loadEcharts();     //加载图标
 </script>
+
 
 
 </html>

@@ -54,9 +54,9 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
-                        @change="searchdata"
                         :picker-options="pickerOptions2">
                 </el-date-picker>
+                <el-button plain v-on:click="searchdata">查询</el-button>
             </div>
             <!--表格-->
             <el-table
@@ -85,19 +85,22 @@
                                 <el-collapse-item title="简介" name="1">
                                     <div>{{nowPest.brief}}</div>
                                 </el-collapse-item>
-                                <el-collapse-item title="发生规律" name="2">
-                                    <div>{{nowPest.appearlaw}}</div>
-                                </el-collapse-item>
-                                <el-collapse-item title="天敌" name="3">
-                                    <div>{{nowPest.enemy}}</div>
-                                </el-collapse-item>
-                                <el-collapse-item title="生活习性" name="4">
+                                <el-collapse-item title="描述" name="2">
                                     <div>{{nowPest.describe}}</div>
                                 </el-collapse-item>
-                                <el-collapse-item title="危害特点" name="5">
-                                    <div>{{nowPest.characteristic}}</div>
+                                <el-collapse-item title="发生规律" name="3">
+                                    <div>{{nowPest.appearlaw}}</div>
                                 </el-collapse-item>
-                                <el-collapse-item title="防治时段" name="6">
+                                <el-collapse-item title="天敌" name="4">
+                                    <div>{{nowPest.enemy}}</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="生活习性" name="5">
+                                    <div>{{nowPest.live}}</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="危害特点" name="6">
+                                    <div>{{nowPest.damage}}</div>
+                                </el-collapse-item>
+                                <el-collapse-item title="防治手段" name="7">
                                     <div>{{nowPest.solve}}</div>
                                 </el-collapse-item>
                             </el-collapse>
@@ -111,26 +114,26 @@
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="collectionTime"
+                        prop="colletionTime"
                         label="检测时间"
                         align="center"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="updateTime"
-                        label="更新时间"
+                        prop="number"
+                        label="害虫数量"
                         align="center"
                         width="180">
                 </el-table-column>
                 <el-table-column
-                        prop="harmLevel"
+                        prop="harm_level"
                         align="center"
                         label="危害等级">
                 </el-table-column>
                 <el-table-column>
                     <template slot-scope="scope">
                         <!--点击之后跳转到数据分析界面-->
-                        <el-button round>数据分析</el-button>
+                        <el-button round @click="toDataSearch(scope.row.id)">数据分析</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -178,7 +181,7 @@
     @import "../static/css/index.css";
 </style>
 <!-- util.js文件 -->
-<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript" src="../static/js/jumpPage.js"></script>
 <!--引入js文件-->
 <script src="../static/js/index.js"></script>
 <script>

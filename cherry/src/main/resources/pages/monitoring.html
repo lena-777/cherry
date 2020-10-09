@@ -44,8 +44,31 @@
         <el-row>
             <!--实时监控-->
             <el-col :span="16">
-                <!--frameborder="no" scrolling="no" style="background:rgba(0,0,0,0.2)"-->
-                <iframe width="100%" height="550px" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen"  src="https://open.ys7.com/ezopen/h5/iframe_se?url=ezopen://kuvijh@open.ys7.com/C83568071/1.live&autoplay=0&audio=1&accessToken=at.56iepn8zcmh542p15mf5b6yy5x67vx8d-6pluzj4ezc-0qyd3es-xjjdfn27g&templete=2"></iframe>
+                <!--选择设备-->
+                <template>
+                    <div style="text-align: center">
+                        <!--下拉框-->
+                        <span style="color: grey">请选择想查看的设备：</span>
+                        <el-select v-model="nowEquipment.equipmentName" placeholder="请选择">
+                            <el-option
+                                    v-for="item in equipment"
+                                    :key="item.id"
+                                    :value="item.equipmentName">
+                            </el-option>
+                        </el-select>
+                        <!--按钮-->
+                        <el-button plain v-on:click="seachEquipmentByName">查询</el-button>
+                    </div>
+                </template>
+                <!--监控设备-->
+                <iframe name="monIframe"
+                        width="100%" height="550px"
+                        style="margin-top: 2%"
+                        frameborder="no"
+                        scrolling="no"
+                        allowfullscreen="allowfullscreen"
+                        :src="nowEquipment.videoUrl">
+                </iframe>
             </el-col>
             <!--上传图片-->
             <el-col :span="8">
@@ -71,12 +94,12 @@
                     <span style="color: #6f7180">分析示例图：</span>
                     <div><img src="../static/img/suchas.jpg" style="height: 80%;width: 80%;margin-top: 3%"></div>
                 </div>
-                <div style="margin-left: 5%;margin-top: 5%" v-if="isAnalyze">
+<!--                <div style="margin-left: 5%;margin-top: 5%" v-if="isAnalyze">
                     <span style="color: #6f7180">分析结果：</span>
                     <div style="background-image: url('../static/img/show5.jpg');width: 100%;height:100%;background-repeat: no-repeat;margin-top: 3%">
                         <canvas id="canvas" width="200" height="300"></canvas>
                     </div>
-                </div>
+                </div>-->
             </el-col>
         </el-row>
     </el-main>
@@ -114,10 +137,10 @@
     @import "../static/css/index.css";
 </style>
 <!-- util.js文件 -->
-<script type="text/javascript" src="../static/js/util.js"></script>
+<script type="text/javascript" src="../static/js/jumpPage.js"></script>
 <!--引入js文件-->
 <script src="../static/js/index.js"></script>
-<!--画图-->
+<!--画图
 <script>
     const img = new Image();
     const canvas = document.querySelector("#canvas");
@@ -139,5 +162,8 @@
         // 动手
         img.src = "../static/img/show6.jpg";
     console.log("draw");
+</script>-->
+<script>
+    searchEquip();
 </script>
 </html>

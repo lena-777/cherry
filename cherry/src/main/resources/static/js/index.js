@@ -30,24 +30,24 @@ new Vue({
                        picker.$emit('pick', [start, end]);
                    }
                }]
-           },
+           },           //*固定值，用于日期选取。
            currentPage:1,   //当前页
            size:8,     //每页显示条数
            total:20,    //总数据数
+           radio:'',    //存放datasearch选择农药的model
            value7:'',       //arrary数组 value7[0]表示起始日期，value7[1]表示终止日期
+           value1:[],       //存放最近七天的日期
            startDate:'',    //开始日期
            endDate:'',      //截止日期
            isAnalyze:false, //是否传照片了
            searchLogId:'',   //日志查询的ID
            echartData:{
                text:"害虫数据分析表",
-               date:['2020-09-16','2020-09-16','2020-09-16','2020-09-16','2020-09-16','2020-09-17','2020-09-17','2020-09-17','2020-09-17','2020-09-18','2020-09-18','2020-09-17','2020-09-19','2020-09-20','2020-09-21'],
+               date:[],
+               xData:[],
                pest:[{
-                   name:'害虫a',
-                   data:[820, 932, 901, 934,120, 132,  210,100,410,120, 132, 101, 134, 90, 230, 210,100, 1290, 1330, 1320,101, 134, 90, 230, 2]
+                   name:''
                }],
-               startDate:'2019-09-16',
-               endDate:'2019-09-21',
                //获取数据库中危害等级表
                myMarkLine: {
                    silent: true,
@@ -96,37 +96,14 @@ new Vue({
                    x:300,
                    y:100,
                }],
-               data:        [
+            /*   data:[]*/
+               data:[
                    {
                        name: '害虫a',
                        type: 'line',
                        stack: '总量',
-                       markLine:{
-                           data:''
-                       },
                        smooth:true,  //这个是把线变成曲线
-                       data: [120, 132, 101, 134, 90, 230, 210,100,410,120, 132, 101, 134, 90, 230, 210,100,20,304,20,40,1021,302,2423]
-                   },
-                   {
-                       name: '害虫b',
-                       type: 'line',
-                       stack: '总量',
-                       smooth:true,  //这个是把线变成曲线
-                       data: [220, 182, 191, 234,120, 132, 101, 134, 90, 230, 210,100,410, 290, 330, 310,120, 132, 101, 134, 90, 230, 210,100]
-                   },
-                   {
-                       name: '害虫c',
-                       type: 'line',
-                       stack: '总量',
-                       smooth:true,  //这个是把线变成曲线
-                       data: [150, 232, 201, 154, 190, 330, 120, 132, 101, 134, 90, 230, 210,100,410,120, 132, 101, 134, 90, 230, 210,100,410]
-                   },
-                   {
-                       name: '害虫d',
-                       type: 'line',
-                       stack: '总量',
-                       smooth:true,  //这个是把线变成曲线
-                       data: [320,120, 132, 120, 132, 101, 134, 90, 230, 210,100,410,101, 134, 90, 230, 210,100, 332, 301, 334, 390, 330, 320]
+                       data: [1,3,8,5,1,2,1,4,1,0,1,2,1,10,2,0,5,1,3,1,9,11,5,12,2,1,0,1,0,1,6,2]
                    },
                    {
                        name:'',
@@ -135,27 +112,17 @@ new Vue({
                        markLine: {
                            silent: true,
                            data: [{
-                               yAxis: 500,
-                               label:{
-                                   formatter:'危害等级E'
-                               }
-                           }, {
-                               yAxis: 1000,
-                               label:{
-                                   formatter:'危害等级D'
-                               }
-                           }, {
-                               yAxis: 1500,
+                               yAxis: 30,
                                label:{
                                    formatter:'危害等级C'
                                }
                            }, {
-                               yAxis: 2000,
+                               yAxis: 20,
                                label:{
                                    formatter:'危害等级B'
                                }
                            }, {
-                               yAxis: 2500,
+                               yAxis: 10,
                                label:{
                                    formatter:'危害等级A'
                                }
@@ -170,186 +137,159 @@ new Vue({
                    },
                ]
            },   //图表模拟数据
-           pestData:[{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。",
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               brief:"桑白蚧属同翅目，盾蚧科。雌成虫橙黄或橙红色，体扁平卵圆形，长约1毫米，腹部分节明显。雌介壳圆形，直径2-2.5毫米，略隆起，有螺旋纹，灰白至灰褐色，壳点黄褐色，在介壳中央偏旁。雄成虫橙黄至橙红色，体长 桑白蚧体长0.6-0.7毫米，仅有翅1对。雄介壳细长，白色，长约1毫米，背面有3条纵脊，壳点橙黄色，位于介壳的前端。卵椭圆形，长径仅0.25-0.3毫米。初产时淡粉红色，渐变淡黄褐色，孵化前橙红色。初孵若虫淡黄褐色，扁椭圆形、体长0.3毫米左右，可见触角、复眼和足，能爬行，腹末端具尾毛两根，体表有绵毛状物遮盖。脱皮之后眼、触角、足、尾毛均退化或消失，开始分泌蜡质介壳。",
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },{
-               id:1,
-               name:"嘉志",
-               picture:"../static/img/pestPicture",      //存图片
-               describe:"雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic:"在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve:"农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-                   "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。"
-           },],
-           nowPest: {
-               id: 1,
-               name: "嘉志",
-               brief: "桑白蚧属同翅目，盾蚧科。雌成虫橙黄或橙红色，体扁平卵圆形，长约1毫米，腹部分节明显。雌介壳圆形，直径2-2.5毫米，略隆起，有螺旋纹，灰白至灰褐色，壳点黄褐色，在介壳中央偏旁。雄成虫橙黄至橙红色，体长 桑白蚧体长0.6-0.7毫米，仅有翅1对。雄介壳细长，白色，长约1毫米，背面有3条纵脊，壳点橙黄色，位于介壳的前端。卵椭圆形，长径仅0.25-0.3毫米。初产时淡粉红色，渐变淡黄褐色，孵化前橙红色。初孵若虫淡黄褐色，扁椭圆形、体长0.3毫米左右，可见触角、复眼和足，能爬行，腹末端具尾毛两根，体表有绵毛状物遮盖。脱皮之后眼、触角、足、尾毛均退化或消失，开始分泌蜡质介壳。",
-               enemy: "桑白蚧的天敌种类较多，桑白蚧褐黄蚜小蜂（Prospaltella beriosei How）是寄生性天敌中的优势种，红点唇瓢虫（Chilocorus kuwanae Silvestri）和日本方头甲（Cybocophalus nipponicus Endr&Ouml;dy-Younga）则是捕食性天敌中的优势种，它们是在自然界中控制桑白蚧的有效天敌。",
-               picture: "../static/img/pestPicture.jpg",      //存图片
-               describe: "雌成虫体长0.9-1.2毫米，淡黄至橙黄色。介壳灰白至黄褐色，有螺旋形纹，两点黄褐色，偏生。雄体0.6-0.7毫米长，翅展1.8毫米，触角10节，念珠状。前翅卵形，被细毛，灰白色；后翅退化为平衡棒。初孵若虫淡黄褐色，偏椭圆形，0.3毫米，眼、触角、足俱全，腹末有2根尾毛；至2龄，眼、触角、足皆退化，两眼间具2腺孔，分泌绵毛状蜡丝覆盖虫体。",     //害虫介绍
-               characteristic: "在北方地区年生2代，以第2代受精雌虫于枝条上越冬，寄主萌动时开始吸食危害。5月中旬为卵孵始盛期，分散在2-5年生枝条上固着取食。分叉处和阴面居多，6-7天后开始分泌苗毛状蜡丝，形成介壳。第一代若虫期长达40-50天，第二代若虫期30-40天，发生期长，跨度大。",
-               solve: "农业防治：果树休眠期用硬毛刷，清除枝条上的越冬雌虫，剪除受害枝条。\n" +
-               "药剂防治：清除越冬雌虫后，用5%矿物油乳剂喷洒杀虫；生长期、越冬虫分散转移期，大约7天，连续喷2次药。用20%灭扫利乳油4000倍液或20%速灭杀丁乳油3000倍液，或50%久效磷乳油1500-2000倍液。药液中混入0.3%-0.5%机油乳剂，可提高效果。",  //当前显示的害虫
-               appearlaw: "我国各地的发生代数不同，在华北地区一年发生2代，在山东省一年发生2-3代，在浙江省一年发生3代，在广东省一年发生5代。均以受精雌成虫在二年生以上的枝条上群集越冬。翌春果树萌芽时，越冬成虫开始吸食汁液，虫体随之膨大。在北方果产区，越冬成虫从4月下旬开始产卵，5月中旬为产卵盛期，每头雌虫产卵250-300粒。卵于5月上旬开始孵化，孵化盛期在5月中、下旬。初孵若虫分散爬行到2-5年生枝条上取食，以枝条分权处和阴面较多。7-10天后，便固定在枝条上，分泌绵毛状蜡丝，逐渐形成介壳。第1代若虫期为40-50天，但爬行期很短。从6月下旬开始羽化第1代成虫，盛期在7月上、中旬。成虫继续产卵于介壳下，卵期10天左右。第2代若虫发生在8月份，若虫期为30-40天。9月份出现雄成虫，雌雄交尾后，雄虫死亡，雌虫继续为害至9月下旬。此后，停止取食，开始越冬 [1]  。",
-           },
+           pestData:[],         //所有害虫信息
+           nowPest:  {
+               "id": "01",
+               "name": "桃红颈天牛",
+               "describe": "桃红颈天牛属鞘翅目，天牛科。体黑色，有光亮；前胸背板红色，背面有4个光滑疣突，具角状侧枝刺；鞘翅翅面光滑，基部比前胸宽，端部渐狭；雄虫触角超过体长4～5节，雌虫超过1～2节。它体长28～37mm。主要分布于北京、东北、河北、河南、江苏、浙江等地。",
+               "brief": "成虫：体黑色，有光亮；前胸背板红色，背面有4个光滑疣突，具角状侧枝刺；鞘翅翅面光滑，基部比前胸宽，端部渐狭；雄虫触角成虫　有两种色型：一种是身体黑色发亮和前胸棕红色的“红颈型”，另一种是全体黑色发亮的“黑颈”型。据初步了解，福建、湖北有“红颈”和“黑颈”两型的个体，而长江以北如山西、河北等地只见有“红颈”个体。成虫体长约28-37毫米，体黑色发亮，前胸背面大部分为光亮的棕红色或完全黑色。头黑色，腹面有许多横皱，头顶部两眼间有深凹。触角蓝紫色，基部两侧\r\n各有一叶状突起。前胸两侧各有刺突一个，背面有4个瘤突。鞘翅表面光滑，基部较前胸为宽，后端较狭。雄虫身体比雌虫小，前胸腹面密布刻点，触角超过虫体5节；雌虫前胸腹面有许多横皱，触角超过虫体两节。\r\n卵：卵圆形，乳白色，长约6-7毫米。\r\n幼虫：老熟幼虫体长约42-52毫米，乳白色，前胸较宽广。身体前半部各节略呈扁长方形，后半部稍呈圆筒形，体两侧密生黄棕色细毛。前胸背板前半部横列4个黄褐色斑块，背面的两个各呈横长方形，前缘中央有凹缺，后半部背面谈色，有纵皱纹；位于两侧的黄褐色斑块略呈三角形。胸部各节的背面和腹面都稍微隆起，并有横皱纹。\r\n蛹：体长35毫米左右，初为乳白色，后渐变为黄褐色。前胸两侧各有一刺突",
+               "picture": "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1601214869&di=c196c4d1b6a022ab8028b9fcb9c8103a&src=http://www.linye.sh.cn/Images/Upload/2012_6_27/%E6%A1%83%E7%BA%A2%E9%A2%88%E5%A4%A9%E7%89%9B.JPG",
+               "appearlaw": "成虫羽化后在树干蛀道中停留3-5天后外出活动。雌成虫遇惊扰即行飞逃，雄成虫则多走避或自树上坠下，落入草中。成虫外出活动2-3天后开始交尾产卵。常见成虫于午间在枝条上栖息或交尾。卵产在枝干树皮缝隙中。幼壮树仅主干上有裂缝，老树主干和主枝基部都有裂缝可以产卵。一般近土面35厘米以内树干产卵最多，产卵期5-7天。产卵后不久成虫便死去。",
+               "enemy": "管氏肿腿蜂寄生于幼虫",
+               "live": "此虫一般二年，少数三年，发生1代，以幼龄幼虫第1年和老熟幼虫第2年越冬。成虫于5-8月间出现；各地成虫出现期自南至北依次推迟。福建和南方各省于5月下旬成虫盛见；湖北于6月上中旬成虫出现最多；成虫终见期在7月上旬。河北成虫于7月上中旬盛见；山东成虫于7月上旬至8月中旬出现；北京7月中旬至8月中旬为成虫出现盛期。",
+               "damage": "主要危害核果类，如桃、杏、樱桃、郁李、梅等，也危害柳、杨、栎、柿、核桃、花椒等。幼虫蛀入木质部危害，造成枝干中空，树势衰弱，严重时可使植株枯死",
+               "solve": "（1）人工防治：幼虫孵化期，人工刮除老树皮，集中烧毁。成虫羽化期，人工捕捉，主要利用成虫中午至下午2～3时静栖在枝条上，特别是下到树干基部的习性，进行捕捉。由于成虫羽化期比较集中，一般在10天左右。在此期间坚持人工捕捉，效果显著。成虫产卵期，经常检查树干，发现有方形产卵伤痕，及时刮除或以木槌击死卵粒（2）药剂防治：对有新鲜虫粪排出的蛀孔，可用小棉球蘸敌敌畏煤油合剂（煤油1000克加入80%敌敌畏乳油50克）塞入虫孔内，然后再用泥土封闭虫孔，或注射80%敌敌畏原液少许，洞口敷以泥土，可熏杀幼虫。",
+               "createTime": null,
+               "createBy": null,
+               "pesticides": [
+                   {
+                       "id": "01",
+                       "name": "50%辛硫磷乳油",
+                       "method": " 防治卫生害虫 用50%乳油500-1000倍液喷洒家畜厩舍，防治卫生害虫效果好，对家畜安全",
+                       "water_ratio": 20,
+                       "picture": null,
+                       "createBy": null,
+                       "createTime": null,
+                       "isDelete": null,
+                       "warning": " 1.不能与碱性物质混合使用。\r\n2．黄瓜、菜豆对辛硫磷敏感，易产生药害。\r\n3．辛硫磷见光易分解，所以田间使用最好在夜晚或傍晚使用。\r\n4．高粱对辛硫磷敏感，不宜喷撒使用。玉米田只能用颗粒剂防治玉米螟，不要喷雾防治蚜虫、粘虫等。\r\n5．中毒症状，急救措施与其他有机磷相同。",
+                       "byeffect": "本品为低毒有机磷杀虫剂。能抑制胆碱酯酶活性。中毒症状有头痛、头昏、恶心、多汗、流涎、瞳孔缩小、腹痛等症状。",
+                       "brief": " 辛硫磷是一种有机磷杀虫剂，化学式为C12H15N2O3PS，以触杀和胃毒作用为主，无内吸作用，对鳞翅目幼虫很有效。辛硫磷杀虫谱广，击倒力强，在田间因对光不稳定，很快分解，所以残留期短，残留危险小，但该药施入土中，残留期很长，适合于防治地下害虫， 剂型 50%，45%辛硫磷乳油，5%颗粒剂。",
+                       "suiteffect": " 适合于防治地下害虫。对危害花生、小麦、水稻、棉花、玉米、果树、蔬菜、桑、茶等作物的多种鳞翅目害虫的幼虫有良好的作用效果，对虫卵也有一定的杀伤作用。也适于防治仓库和卫生害虫。"
+                   }
+               ]
+           },   //当前查询的害虫
            fileList: [{name: '', url: ''}],
-           logData:[{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:8,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:3,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:0,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:5,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:7,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:1,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:5,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:2,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:2,
-               confidence:100,
-               updateTime:"2018-12-19",
-           },{
-               id:0,
-               collectionTime:"2018-12-07",
-               pestName:"嘉志",
-               harmLevel:1,
-               confidence:100,
-               updateTime:"2018-12-19",
-           }],
-           show: true,
+           logData:[],      //所有日志
+           show: true,      //index轮播图使用效果
            timer:'',    //定时器
-           //loading: true,
-           nowWarnData:{},  //当前查询的日志信息
+           nowWarnData:{pestName:'',id:''},  //当前查询的日志信息
+           equipment:[],        //当前用户的所有监控设备
+           nowEquipment:{equipmentName:'',}, //当前用户查看的监控设备
+           value2:'',       //存放warning页面选择的起始日期和结束日期
+           warningWarnDate:[],      //存放warning页面选择起始日期和结束日期查询到的数据
+           harmLevel:[],    //危害等级
+           formatHarmLevel:[],      //格式化的危害等级
+           datasearchPest:{},       //datasearch当前查询的害虫信息
+           echarts2:{xData:[0,0,0,0,0,0,0],data:[0,0,0,0,0,0,0]}, //图表2所需要的数据 xData=>横坐标需要的数据，data=>实际数据
+           nowPesticides:{name:"80%敌敌畏乳油",brief:"本品为中等毒性的有机磷杀bai虫剂，具有杀虫广谱，作用迅du速，残效期短等特点zhi。对害虫有胃毒、触杀及强大的熏蒸杀虫效果，适用于防治棉花、小麦、茶、青菜、苹果树等作物及粮仓、卫生等多种害虫。持效期7天左右.",method:"利用其熏蒸作用防治多种不宜防治的隐蔽性害虫。",suiteffect:"纯品为无色至琥珀色液体，微带芳香味。制剂为浅黄色至黄棕色油状液体，在水溶液中缓慢分解，遇碱分解加快，对热稳定，对铁有腐蚀性。对人畜中毒，对鱼类毒性较高，对蜜蜂剧毒。对害虫作用迅速，残效期短，可有效防治水稻、棉花、小麦、茶树、蔬菜、桑树、果树等植物上的多种害虫及粮仓、卫生害虫，如稻飞虱、蚜虫、黏虫、卷叶蛾、刺蛾、菜青虫、造桥虫、尺蠖、白粉虱、松毛虫、多种储藏害虫、苍蝇、蚊子等。",byeffect:"无",warning:"具有强烈的胃毒、触杀和熏蒸作用",waterRatio:"1200"},    //当前点击的农药。默认为pestPesticides第一个数据
        }
    },
     methods:{
-       //t加载图表数据
+        //t获取日期范围1
+        getDate:function(){
+            this.echartData.xData=getAllDate(this.value2[0], this.value2[1]);
+           // this.loadEcharts();
+            this.getDataByDate();
+        },
+        //t获取日志数据2
+        getDataByDate:function() {
+            this.echartData.data=[];    //清空原来的数据
+            //console.log("clean")
+            //console.log(this.echartData.data);
+            axios.post(`http://47.112.214.76:9010/warnData/findOredrByPestName`,{startTime:this.value2[0]+" 00:00:00",endTime:this.value2[1]+" 23:59:59"}).then(response=>{
+                var map=new Map();
+                map=response.data.data;
+                let currentData=new Array();
+                let i=0;let j=0;let d;let result;
+                for(let m in map){      //m为key的值
+
+                    let save=new Array();
+                    currentData=map[m];
+                    j=this.echartData.xData.length-1;
+                    i=0;
+                    while (j>-1){
+                        if (i>=currentData.length) {
+                            save.unshift(0);
+                            j--;
+                        }else{
+                            d=new Date(currentData[i].colletionTime).format("yyyy-MM-dd"); //格式化日期
+                            //console.log(this.echartData.xData[j]+"---"+d);
+                            result=compareDate(this.echartData.xData[j],d);
+                            //判断该日期是否存在害虫.(当参数1＜参数2时，返回-1；当参数1=参数2时，返回0；当参数1＞参数2时，返回1)
+                            //
+                            if (result == 0){
+                                save.unshift(currentData[i].number);
+                                i++;
+                                j--;
+                            }else if (result == 1){
+                                save.unshift(0);
+                                j--;
+                            }else{
+
+                                i++;    //不会出现这种情况
+                            }
+                        }
+                    }
+                    console.log(save);
+                    this.echartData.data.push({
+                        name:m,
+                        type:'line',
+                        stack:'总量',
+                        smooth:true,
+                        data:save,
+                    })
+                }
+                this.loadEcharts();
+                //this.searchHarmLevel();
+            }).catch(function (error) {
+                console.log(error);
+            });
+           console.log(this.echartData.data)
+        },
+        //查询危害等级3
+        searchHarmLevel:function () {
+            axios.get(`http://47.112.214.76:9010/harmLevel`).then(response=>{
+                this.harmLevel=response.data.data[0];
+            }).catch(function (error) {
+                console.log(error);
+            });
+            this.changeLevelFormat(); //格式化等级数据
+        },
+        //将危害等级的数据修改为图表显示所需的格式(在查询完当前图表显示的害虫日志后再将数据push进去)4
+        changeLevelFormat:function () {
+            for (var i=0;i<this.harmLevel.length;i++){
+                this.formatHarmLevel.push({
+                    yAxis:this.harmLevel[i].minV,
+                    label:{
+                        formatter:this.harmLevel[i].level
+                    }
+                });
+            }
+            //添加必要信息
+            this.formatHarmLevel={
+                name:'',
+                data:'',
+                type:'line',
+                markLine:{
+                    silent:true,
+                    data:this.formatHarmLevel
+                }
+            };
+            this.echartData.data.push(this.formatHarmLevel);
+            //console.log(this.echartData.data);
+            this.loadEcharts();     //加载图表
+        },
+        //t加载warning图表数据5
         loadEcharts(){
             var option={
                 title: {
-                    text:this.echartData.text,
-                    //  text:'hello'
+                    text:this.echartData.text,          //固定表名
                 },
                 tooltip: {
                     trigger: 'axis'
                 },
                 legend: {
-                    // data: ['邮件营销', '联盟广告', '视频广告', '直接访问', '搜索引擎']
-                    data:this.echartData.pest.name,
+                    data:this.echartData.pest.name,         //害虫名
                 },
                 grid:{
                     x: 100,//x的值可以空值y轴与label标签的距离
@@ -364,80 +304,17 @@ new Vue({
                 xAxis: {
                     type: 'category',
                     boundaryGap: false,
-                    data: this.echartData.date,
-                    //data:[100,200,300,400,500]
+                    data: this.echartData.xData,         //查询的日期范围
                 },
                 yAxis: {
                     splitLine: {
                         show: false
                     }
                 },
-                series: this.echartData.data,
+                series: this.echartData.data,           //查询出的害虫数据
             };
             var mycharts=echarts.init(document.getElementById("mycharts"));
-            mycharts.setOption(option);
-        },
-       //t查询某个害虫
-        searchPest:function (pestName) {
-            //传入害虫id（pest.id），获取数据库的数据添加到nowPest数据中，会显示在页面。
-            this.nowPest={};  //清空原先的数据
-            this.nowPest.pestName=pestName;
-            //axios根据害虫名字查询某个害虫所有信息，存入nowPest中
-            axios.post(`http://47.112.214.76:9010/pest/search`,this.nowPest).then(response=>{
-                this.nowPest=response.data.data[0];
-            }).catch(function (error) {
-                console.log(error);
-            })
-        },
-        //根据日志id查询数据
-        searchWarnDataById:function (id) {
-          axios.get(`http://47.112.214.76:9010/warnData/${id}`).then(response=>{
-              this.nowWarnData=response.data.data;                  //怎么区分是直接跳转到页面的，还是通过查询数据跳转的？
-          }).catch(function (error) {
-              console.log(error);
-          })
-        },
-        //选择数据日期范围之后进行数据查询
-        searchdata:function () {
-            //根据日期查询数据 value7[0]表示起始日期，value7[1]表示终止日期
-            console.log(this.value7)
-        },
-        //查询所有害虫
-        findAllPest:function () {
-
-        },
-        //t查询当前页日志信息
-        findAllLog:function () {
-            axios.post(`http://47.112.214.76:9010/warnData/search/${this.currentPage}/${this.size}`,{}).then(response=>{
-               // console.log(response.data.data);
-                this.logData=response.data.data.rows;
-                this.total=response.data.data.total;
-            }).catch(function (error) {
-                console.log(error);
-            })
-        },
-        //查询特定日志信息
-        findLogByDate:function (t) {
-            this.startDate=t[0];
-            this.endDate=t[1];
-            //通过日期获取数据返回到logData中
-
-        },
-        handleSelect(key, keyPath) {
-            console.log(key, keyPath);
-        },
-        //t判断当前数据是否达到危险，控制表格的输出
-        tableRowClassName({row, rowIndex}) {
-            //判断当前危险等级
-            if (row.harmLevel > 3) {
-                return 'warning-row';
-            }
-            return '';
-        },
-        //更改图片触发的方法,修改show的值，使图片弹出
-        changePicture:function () {
-            this.show=!this.show;
-            console.log(this.show);
+            mycharts.setOption(option,true);
         },
         //上传图片到服务器,并查看分析结果
         submitUpload() {
@@ -455,6 +332,196 @@ new Vue({
         handlePreview(file) {
             console.log("查看"+file.url);
         },
+        //t数据分析按钮跳转页面
+        toDataSearch:function (id) {
+            //console.log("当前id是："+id);
+            window.location.href="datasearch.html?id="+id;     //页面跳转
+            searchWarnDataById1(id);
+        },
+        //t加载datasearch图标数据
+        loadDataEcharts(){
+            var options2= {
+                xAxis: {
+                    type: 'category',
+                    // data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                    data:this.echarts2.xData,
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    // data: [820, 932, 901, 934, 1290, 1330, 1320],
+                    data:this.echarts2.data,
+                    type: 'line',
+                    smooth: true
+                }]
+            };
+            var mycharts2=echarts.init(document.getElementById("mycharts2"));
+            mycharts2.setOption(options2);
+        },
+        //t根据日志id查询数据
+        searchWarnDataById:function (id) {
+            axios.get(`http://47.112.214.76:9010/warnData/${id}`).then(response=>{
+               this.nowWarnData=response.data.data;                  //怎么区分是直接跳转到页面的，还是通过查询数据跳转的？
+                console.log("执行第一个方法："+this.nowWarnData.pestName);
+                console.log("传入第二个方法："+this.nowWarnData.pestName);
+                this.searchPest(this.nowWarnData.pestName);     //查询当前害虫信息
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        //t根据日志id查询数据 连续的方法1
+        searchWarnDataById1:function (id) {
+            axios.get(`http://47.112.214.76:9010/warnData/${id}`).then(response=>{
+                this.nowWarnData=response.data.data;                  //怎么区分是直接跳转到页面的，还是通过查询数据跳转的？
+               // console.log("执行第一个方法："+this.nowWarnData.pestName);
+               // console.log("传入第二个方法："+this.nowWarnData.pestName);
+                this.searchPest1(this.nowWarnData.pestName);     //查询当前害虫信息
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        //t查询某个害虫 根据害虫名 连续的方法2
+        searchPest1:function (pestName) {
+            //传入害虫id（pest.id），获取数据库的数据添加到nowPest数据中，会显示在页面。
+            //axios根据害虫名字查询某个害虫所有信息，存入nowPest中
+            axios.post(`http://47.112.214.76:9010/pest/search`,{name:pestName}).then(response=>{
+                this.nowPest=response.data.data[0];
+                this.nowPesticides=response.data.data[0].pesticides[0];
+                this.searchLogToEcharts(this.nowWarnData.pestName);    //查询图表数据
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        //t将查询到日志的害虫值存入(在点击查询按钮的时候同时触发该方法)
+        searchLogToEcharts:function(pestName){
+            //console.log("时间"+this.value1[0]+"--"+this.value1[1]);
+            axios.post(`http://47.112.214.76:9010/warnData/search`,{pestName:pestName,startTime:this.value1[0]+" 00:00:00",endTime:this.value1[1]+" 23:59:59"}).then(response=>{
+                //遍历获取到的数据 (判断数据存在再继续进行)
+                let all=new Array();
+                all=response.data.data;
+                let j=6;let i=0;
+                let result=0;let d;
+                if (all.length==0){         //若该日志对应的害虫在近7天内没有出现害虫，则数量都为0
+                    this.echarts2.data=[0,0,0,0,0,0,0];
+                }
+                while(i<all.length&&j>-1){
+                    d=new Date(all[i].colletionTime).format("yyyy-MM-dd");      //因为后台返回的数据带HH:mm:ss，因此要格式化将日期变成不带时间的形式，才可以进行比较
+                    //判断该日期是否存在害虫.(当参数1＜参数2时，返回-1；当参数1=参数2时，返回0；当参数1＞参数2时，返回1)
+                    result=compareDate(this.echarts2.xData[j],d);
+                    if (result == 0){
+                        this.echarts2.data[j]=all[i].number;
+                        i++;
+                        j--;
+                    }else if (result == 1){
+                        j--;
+                    }else{
+                        i++;
+                    }
+                }
+                this.loadDataEcharts();         //重新加载图表，更新数据
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //t获取datasearch图表的横坐标
+        getxData:function () {
+            //获取日期范围
+            let end=new Date().format("yyyy-MM-dd");
+            let start=new Date();
+            start.setTime(start.getTime()-3600 * 1000 * 24 * 6);        //求起始日期，即一周前的日期。
+            let s=new Date(start).format("yyyy-MM-dd");
+            this.echarts2.xData=getAllDate(s, end);
+            //存值，方便后面获取数据
+            this.value1.push(s);
+            this.value1.push(end);
+            //console.log("初始化"+this.value1[0]+"---"+this.value1[1]);
+        },
+        //t根据农药名称查询农药全部信息
+        changePesticides:function (id) {
+            axios.get(`http://47.112.214.76:9010/pesticides/${id}`).then(response=>{
+                this.nowPesticides=response.data.data;
+                console.log(this.nowPesticides);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //element需要的方法
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+        },
+        //t判断当前数据是否达到危险，控制表格的输出
+        tableRowClassName({row, rowIndex}) {
+            //判断当前危险等级
+            if (row.harmLevel > 1) {
+                return 'warning-row';
+            }
+            return '';
+        },
+        //t查询某个害虫 根据害虫名
+        searchPest:function (pestName) {
+            //传入害虫id（pest.id），获取数据库的数据添加到nowPest数据中，会显示在页面。
+            //axios根据害虫名字查询某个害虫所有信息，存入nowPest中
+            axios.post(`http://47.112.214.76:9010/pest/search`,{name:pestName}).then(response=>{
+                this.nowPest=response.data.data[0];
+                this.nowPesticides=response.data.data[0].pesticides[0];
+            }).catch(function (error) {
+                console.log(error);
+            });
+        },
+        //t选择数据日期范围之后进行数据查询(datareport)
+        searchdata:function () {
+            //根据日期查询数据 value7[0]表示起始日期，value7[1]表示终止日期
+            axios.post(`http://47.112.214.76:9010/warnData/search/${this.currentPage}/${this.size}`,{startTime:this.value7[0]+" 00:00:00",endTime:this.value7[1]+" 00:00:00"}).then(response=>{
+                // console.log(response.data.data);
+                this.logData=response.data.data.rows;
+                this.total=response.data.data.total;
+                 //console.log(this.logData);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //选择数据日期范围之后进行数据查询(warning)
+        searchdata2:function () {
+            //根据日期查询数据 value2[0]表示起始日期，value2[1]表示终止日期
+            axios.post(`http://47.112.214.76:9010/warnData/search`,{startTime:this.value2[0]+" 00:00:00",endTime:this.value2[1]+" 00:00:00"}).then(response=>{
+                // console.log(response.data.data);
+                this.warningWarnDate=response.data.data.rows;
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //t查询当前页日志信息
+        findAllLog:function () {
+            //axios.post(`http://47.112.214.76:9010/warnData/search`,{page:this.currentPage,size:this.size}).then(response=>{
+            axios.post(`http://47.112.214.76:9010/warnData/search/${this.currentPage}/${this.size}`,{}).then(response=>{
+                //console.log(response.data.data);
+                this.logData=response.data.data.rows;
+               // console.log( this.logData);
+                this.total=response.data.data.total;
+                //console.log( this.total);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //t根据监控设备名获取设备
+        seachEquipmentByName:function () {
+            //console.log("ichange");
+            axios.post(`http://47.112.214.76:9010/equipment/search`,this.nowEquipment).then(response=>{
+                this.nowEquipment=response.data.data[0];
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
+        //t获取当前用户的全部监控设备=============用户！
+        searchEquip:function () {
+            //还没写用户表，登录功能，所以userID先写死
+            axios.post(`http://47.112.214.76:9010/equipment/search`,{userId:"敏新"}).then(response=>{
+                this.equipment=response.data.data;
+            }).catch(function (error) {
+                console.log(error);
+            })
+        },
         //t轮播图文字动态效果
         change:function () {
             this.show=false;
@@ -463,7 +530,8 @@ new Vue({
         tochange:function () {
             this.show=true;
         },
-        //t图片画圈
+
+/*        //t图片画圈
         drawPicture:function () {
             //遍历画圈
             var x;
@@ -483,7 +551,7 @@ new Vue({
             ctx.fill();
             ctx.strokeStyle="rgba(192,80,77,1)";//红色
             ctx.stroke();
-        },
+        },*/
         //登录
         submit:function () {
             
@@ -491,13 +559,18 @@ new Vue({
 
     },
     created() {
-      //  this.loadEcharts();
+
     },
     mounted(){
         //将方法赋值给window，这样外部的js文件就可以使用该方法
         window.loadEcharts=this.loadEcharts;
         window.drawPicture=this.drawPicture;
         window.findAllLog=this.findAllLog;
+        window.searchEquip=this.searchEquip;
+        window.searchHarmLevel=this.searchHarmLevel;
+        window.loadDataEcharts=this.loadDataEcharts;
+        window.getxData=this.getxData;
+        window.searchWarnDataById1=this.searchWarnDataById1;
     },
     //关闭前执行的方法
     beforeDestroy(){
