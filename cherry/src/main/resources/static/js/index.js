@@ -103,38 +103,9 @@ new Vue({
                        type: 'line',
                        stack: '总量',
                        smooth:true,  //这个是把线变成曲线
-                       data: [1,3,8,5,1,2,1,4,1,0,1,2,1,10,2,0,5,1,3,1,9,11,5,12,2,1,0,1,0,1,6,2]
+                       data: [1,3,8,49,1,2,20,4,1,0,1,2,1,10,22,0,5,51,3,1,9,11,5,12,2,1,50,1,0,1,6,2]
                    },
-                   {
-                       name:'',
-                       data:'',
-                       type:'line',
-                       markLine: {
-                           silent: true,
-                           data: [{
-                               yAxis: 30,
-                               label:{
-                                   formatter:'危害等级C'
-                               }
-                           }, {
-                               yAxis: 20,
-                               label:{
-                                   formatter:'危害等级B'
-                               }
-                           }, {
-                               yAxis: 10,
-                               label:{
-                                   formatter:'危害等级A'
-                               }
-                           }],
-                           lineStyle: {
-                               normal: {
-                                   type: 'solid',
-                               },
-                           },
-                       }
 
-                   },
                ]
            },   //图表模拟数据
            pestData:[],         //所有害虫信息
@@ -225,12 +196,11 @@ new Vue({
                                 save.unshift(0);
                                 j--;
                             }else{
-
                                 i++;    //不会出现这种情况
                             }
                         }
                     }
-                    console.log(save);
+                    //console.log(save);
                     this.echartData.data.push({
                         name:m,
                         type:'line',
@@ -239,34 +209,50 @@ new Vue({
                         data:save,
                     })
                 }
+                this.echartData.data.push({
+                    name:'',
+                    data:'',
+                    type:'line',
+                    markLine:{
+                        silent:true,
+                        data:this.formatHarmLevel
+                    }
+                });
                 this.loadEcharts();
                 //this.searchHarmLevel();
             }).catch(function (error) {
                 console.log(error);
             });
-           console.log(this.echartData.data)
+          // console.log(this.echartData.data)
         },
         //查询危害等级3
         searchHarmLevel:function () {
             axios.get(`http://47.112.214.76:9010/harmLevel`).then(response=>{
-                this.harmLevel=response.data.data[0];
+                this.harmLevel=response.data.data;
+            //    console.log(this.harmLevel);
+                this.changeLevelFormat(); //格式化等级数据
             }).catch(function (error) {
                 console.log(error);
             });
-            this.changeLevelFormat(); //格式化等级数据
+            //this.loadEcharts();
         },
         //将危害等级的数据修改为图表显示所需的格式(在查询完当前图表显示的害虫日志后再将数据push进去)4
         changeLevelFormat:function () {
-            for (var i=0;i<this.harmLevel.length;i++){
+            //console.log("come")
+            for (let i=0;i<this.harmLevel.length;i++){
                 this.formatHarmLevel.push({
                     yAxis:this.harmLevel[i].minV,
                     label:{
-                        formatter:this.harmLevel[i].level
+                        formatter:"危害等级"+this.harmLevel[i].id
+                       // formatter:this.harmLevel[i].id
                     }
                 });
+                console.log(i);
             }
+            console.log(this.formatHarmLevel);
             //添加必要信息
-            this.formatHarmLevel={
+            //console.log("come")
+            this.echartData.data.push({
                 name:'',
                 data:'',
                 type:'line',
@@ -274,10 +260,10 @@ new Vue({
                     silent:true,
                     data:this.formatHarmLevel
                 }
-            };
-            this.echartData.data.push(this.formatHarmLevel);
-            //console.log(this.echartData.data);
-            this.loadEcharts();     //加载图表
+            })
+            //this.echartData.data.push(this.formatHarmLevel);
+
+            //this.loadEcharts();     //加载图表
         },
         //t加载warning图表数据5
         loadEcharts(){
@@ -363,8 +349,8 @@ new Vue({
         searchWarnDataById:function (id) {
             axios.get(`http://47.112.214.76:9010/warnData/${id}`).then(response=>{
                this.nowWarnData=response.data.data;                  //怎么区分是直接跳转到页面的，还是通过查询数据跳转的？
-                console.log("执行第一个方法："+this.nowWarnData.pestName);
-                console.log("传入第二个方法："+this.nowWarnData.pestName);
+             //   console.log("执行第一个方法："+this.nowWarnData.pestName);
+             //   console.log("传入第二个方法："+this.nowWarnData.pestName);
                 this.searchPest(this.nowWarnData.pestName);     //查询当前害虫信息
             }).catch(function (error) {
                 console.log(error);
