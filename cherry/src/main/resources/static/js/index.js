@@ -3,6 +3,12 @@ new Vue({
    data(){
        return {
            activeName: '1',
+           // fileList3: [{
+           //     name: 'food.jpeg',
+           //     url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100',
+           //     status: 'finished'
+           // }],
+           finleList:[],
            //日期：最近一周、最近一月的处理
            pickerOptions2: {
                shortcuts: [{
@@ -139,7 +145,6 @@ new Vue({
                    }
                ]
            },   //当前查询的害虫
-           fileList: [{name: '', url: ''}],
            logData:[],      //所有日志
            show: true,      //index轮播图使用效果
            timer:'',    //定时器
@@ -302,22 +307,32 @@ new Vue({
             var mycharts=echarts.init(document.getElementById("mycharts"));
             mycharts.setOption(option,true);
         },
-        //上传图片到服务器,并查看分析结果
         submitUpload() {
-            this.isAnalyze=true;
-            //触发上传图片的方法，接收返回的图片
-
-            //在图片上画圈
-           // this.addCircle(100,100);
+         /*   if(this.isAnalyze) {*/
+                //this.$refs.upload.submit();
+                this.$alert('<img src="../static/img/picture.png" style="height: 400px;width: 700px">', '结果', {
+                    dangerouslyUseHTMLString: true,
+                    customClass: 'showResult'
+                });
+/*            }else{
+                alert("请选择图片");
+            }*/
         },
-        //删除图片
+        handleRemove(file, fileList) {
+           // this.isAnalyze=false;
+            console.log(file, fileList);
+        },
+        handlePreview(file) {
+            console.log(file);
+        },
+/*        //删除图片
         handleRemove(file, fileList) {
             console.log("删除"+file, fileList);
         },
         //点击文件时获取文件数据   （打开图片？）
         handlePreview(file) {
             console.log("查看"+file.url);
-        },
+        },*/
         //t数据分析按钮跳转页面
         toDataSearch:function (id) {
             //console.log("当前id是："+id);
@@ -436,6 +451,9 @@ new Vue({
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
         },
+        handleChange(file, fileList) {
+            this.fileList = fileList.slice(-3);
+        },
         //t判断当前数据是否达到危险，控制表格的输出
         tableRowClassName({row, rowIndex}) {
             //判断当前危险等级
@@ -517,7 +535,30 @@ new Vue({
             this.show=true;
         },
 
-/*        //t图片画圈
+        //显示分析结果
+        draw:function () {
+            const img = new Image();
+            const canvas = document.querySelector("#canvas");
+            let ctx;
+            ctx = canvas.getContext("2d");
+            // 当图片加载完再动手
+            img.onload = function () {
+                // 画布大小和图片尺寸不一样算好比例
+                const cWidth = canvas.width, cHeight = canvas.height;
+                const imgWidth = img.naturalWidth, imgHeight = img.naturalHeight;
+                const zoom = {
+                    width: cWidth / imgWidth,
+                    height: cHeight / imgHeight,
+                };
+                // 以图画底
+                ctx.drawImage(img, 0, 0, cWidth, cHeight);
+                drawPicture();
+            },
+                // 动手
+                img.src = "../static/img/show6.jpg";
+            console.log("draw");
+        },
+        //t图片画圈
         drawPicture:function () {
             //遍历画圈
             var x;
@@ -537,7 +578,7 @@ new Vue({
             ctx.fill();
             ctx.strokeStyle="rgba(192,80,77,1)";//红色
             ctx.stroke();
-        },*/
+        },
         //登录
         submit:function () {
             
@@ -550,7 +591,7 @@ new Vue({
     mounted(){
         //将方法赋值给window，这样外部的js文件就可以使用该方法
         window.loadEcharts=this.loadEcharts;
-        window.drawPicture=this.drawPicture;
+        // window.drawPicture=this.drawPicture;
         window.findAllLog=this.findAllLog;
         window.searchEquip=this.searchEquip;
         window.searchHarmLevel=this.searchHarmLevel;
